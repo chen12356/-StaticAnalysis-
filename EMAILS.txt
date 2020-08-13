@@ -1,0 +1,1 @@
+[{'emails': ['xxxx@xxxx.com'], 'path': 'com/huawei/hms/support/api/push/a/d/a.java'}, {'emails': ['danikula@gmail.com'], 'path': 'defpackage/efg.java'}, {'emails': ['您都可以通过拨打高德客服电话4008100080或通过发送邮件至gd.service@autonavi.com与我们联系'], 'path': 'defpackage/bpv.java'}, {'emails': ['gd.jubao@service.autonavi', 'amap01@amap.com'], 'path': 'Android String Resource'}]
