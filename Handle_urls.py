@@ -789,14 +789,14 @@ import asyncio
 import aiohttp
 s_time = time.time()
 class AnalysisResponse(object):
-    def __init__(self,urls:list,total=60,connect=10,sock_connect=15,sock_read=5):
+    def __init__(self,urls:list,total=None,connect=None,sock_connect=15,sock_read=None):
         self.urls = urls
         self.total = total
         self.connect = connect
         self.sock_connect = sock_connect
         self.sock_read = sock_read
     async def get(self,url):
-        connector = aiohttp.TCPConnector(limit=100)
+        connector = aiohttp.TCPConnector(limit=10)
         timeout = aiohttp.ClientTimeout(total=self.total,connect=self.connect,
                                         sock_connect=self.sock_connect,
                                         sock_read=self.sock_read)
@@ -820,8 +820,8 @@ class AnalysisResponse(object):
             print('{0} <-- url: {1}'.format(e, url))
         except UnicodeEncodeError as e:
             print('{0} <-- url: {1}'.format(e, url))
-        except asyncio.futures.TimeoutError as e:
-            print('{0} <-- url: {1}'.format(e, url))
+        # except asyncio.futures.TimeoutError as e:
+        #     print('{0} <-- url: {1}'.format(e, url))
     def handle_resp(self,tasks):
         extract_url_response = []
         for task in tasks:
@@ -836,7 +836,7 @@ class AnalysisResponse(object):
         return extract_url_response
 
     def run(self):
-        tasks = [asyncio.ensure_future(self.request(url)) for url in self.urls[0:20]]
+        tasks = [asyncio.ensure_future(self.request(url)) for url in self.urls]
         # for task in tasks:if task.result()
         #     task.add_done_callback(self.callback)
         loop = asyncio.get_event_loop()
@@ -857,12 +857,13 @@ def main(types:str,datas:list):
         #开始匹配URL响应内容
         access_urls = AUE.extract_access_urls()
         total_unique_urls = sum([u['urls'] for u in access_urls], [])
-        AR_result = AnalysisResponse(urls=total_unique_urls).run()
+        print(total_unique_urls)
+        AR_result = AnalysisResponse(urls=total_unique_urls).run()  #得到response对象
 
         #将解析的内容合并到第一步结果中
-        print(first_result)
-
-        print(AR_result)
+        # print(first_result)
+        #
+        # print(AR_result)
 
     elif types == "emails": return first_result
 start_time = time.time()

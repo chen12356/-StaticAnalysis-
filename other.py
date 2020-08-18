@@ -123,29 +123,18 @@ for i in range(first_length):
                 dic['cards'].extend(ar['cards'])
                 dic['passports'].extend(ar['passports'])
                 dic['response'] = ar['response']
-            elif not dic.get('response',None):
+            elif not dic.get('response', None):
                 dic['response'] = ''
 print(first_result)
 
-a = [
-    {'urls': [
-        {'phones': [], 'cards': ['15042700050885'], 'passports': [],
-                'url': 'https://20150427000508ds81117.hybrid.alipay-eco.com'},
-        {'phones': ['13172636233'], 'cards': ['15042700050885'], 'passports': [],
-                'url': 'https://201.hybrid.alipay-eco.com'}],
-    'path': 'xxxxx333'
-    },
-    {'urls': [
-        {'phones': [], 'cards': ['15042700050885'], 'passports': [],
-        'url': 'https://201504272200050887.hybrid.alipay-eco.com'}],
-        'path': 'xxxxx222'
-    },
-    {'urls': [
+a = [{'urls': [{'phones': [], 'cards': ['1'], 'passports': [], 'url': 'https://20.com', 'response': ''},
+               {'phones': ['13172636233', 'tete'], 'cards': ['15042700050885', '15042700050886'],
+                'passports': ['E13298293'], 'url': 'https://201.com', 'response': 'xsxsx33333--201'}],
+      'path': 'xxxxx333'}, {'urls': [{'phones': [], 'cards': ['15042700050885'], 'passports': [],
+                                      'url': 'https://201504272200050887.hybrid.alipay-eco.com', 'response': ''}],
+                            'path': 'xxxxx222'}, {'urls': [
     {'phones': ['1231212'], 'cards': ['1123123112312313', '15042700050886+123'], 'passports': ['E13298293'],
-     'url': 'https://2.com', 'response': 'xsxsxssxsxsxs'}],
-        'path': 'xxxxx111'
-    }
-]
+     'url': 'https://2.com', 'response': 'xsxsxssxsxsxs'}], 'path': 'xxxxx111'}]
 
 # for dic in dict2:
 #     for d, v in dic.items():
