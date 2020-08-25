@@ -1,7 +1,23 @@
+import random
 from typing import Dict, List
 import re
 
-dat = [{'urls': ['https://api.weibo.cn/2/sdk/login', 'http://api.weibo.cn/2/sdk/login'],
+#前三条测试数据
+dat = [{'urls': ['javascript:(function(){window.ALIPAYVIEWAPPEARED=1})();',
+                 'http://www.baidu.com',
+                 'javascript:(function(){window.ENABLEINPAGEINPUT=false;})()'],
+        'path': 'com/alipay/mobile/nebulacore/web/H5ScriptLoader.java'},
+{'urls': ['javascript:(function(){window.ALIPAYVIEWAPPEARED=1})();',
+                 'javascript:(function(){window.ENABLEINPAGEINPUT=false;})()'],
+        'path': 'com/alipay/mobile/nebulacore/web/H5ScriptLoader.java'},
+    {'urls': ['https://api.weibo.cn/2/sdk/login13145652786', 'http://e18727829api.weibo.cn/2/sdk/login'],
+        'path': 'test1.java'},
+       {'urls': ['//api.weib18337162729o.com/2/proxy/sdk/statistic.json'],
+        'path': 'test2.java'}, {
+           'urls': ['http://www.baidu.com',
+                    'https://service.weibo.com/share/mobilesdk_uppic.php89383898'],
+           'path': 'test3.java'},
+    {'urls': ['https://api.weibo.cn/2/sdk/login', 'http://api.weibo.cn/2/sdk/login'],
         'path': 'com/sina/weibo/sdk/network/intercept/GuestParamInterception.java'},
        {'urls': ['https://api.weibo.com/2/proxy/sdk/statistic.json'],
         'path': 'com/sina/weibo/sdk/statistic/LogReport.java'}, {
@@ -696,19 +712,16 @@ class AnalysisUrlsEmails(object):
         :return:{'phones:[],'cards':[],'passports':[]}返回一个Dict类型
         """
         pattern_phone = re.compile(r'((1|0086|\+861)\d+)', re.UNICODE)
-        phones = [phone[0] for phone in re.findall(pattern_phone, data) if
-                   (phone[0].startswith('1') and len(phone[0]) == 11) or (
-                               '86' in phone[0] and len(phone[0]) in [14, 15])]
-
-        pattern_card_18 = re.compile(
-            (r'(([1-6][1-9]|50)\d{4}(19|20)\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx])'),
+        phones = list(set([phone[0] for phone in re.findall(pattern_phone, data) if
+                           (phone[0].startswith('1') and len(phone[0]) == 11) or (
+                                   phone[0].startswith('0086') and len(phone[0]) == 15) or (
+                                   phone[0].startswith('+86') and len(phone[0]) == 14
+                           )]))
+        pattern_card = re.compile(
+            (r'(([1-6][1-9]|50)\d{4}(19|20)\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx])|'
+             r'(([1-6][1-9]|50)\d{4}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d+)'),
             re.UNICODE)
-        pattern_card_15 = re.compile((
-            r'(([1-6][1-9]|50)\d{4}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d+)'
-        ), re.UNICODE)
-        card_18 = [c_18[0] for c_18 in pattern_card_18.findall(data)]
-        card_15 = [c_15[0] for c_15 in pattern_card_15.findall(data) if len(c_15[0]) == 15]
-        cards = card_15.extend(card_18) if card_15.extend(card_18) else []
+        cards = [card[0] if card[8] == '' else card[8] for card in re.findall(pattern_card, data)]
         pattern_passport = re.compile(
             (r'([EeKkGgDdSsPp]\d{8})|((([Ee][a-hjklmnp-zA-HJKLMNP-Z])|([DdSsPp][Ee])|([Kk][Jj])|([Mm][Aa]))\d{7})'),
             re.UNICODE)
@@ -739,65 +752,28 @@ class AnalysisUrlsEmails(object):
         """
         # 判断参数是否存在urls与emails的key，如果是urls需要进行re处理，否则直接进行re处理邮箱
         if not len(self.datas):
-            return False
+            return []
         key = 'urls' if self.datas[0].get('urls') else 'emails'
-        datas =self.extract_access_urls() if key == 'urls' else self.datas
-        print(datas[0:5])
-        results = []
+        datas =self.extract_access_urls() if key == 'urls' else self.datas #对urls与emails做选择
         for data in datas:
             data_dict, need_datas = {}, []
             try:
-                for tag in data[key]:
-                    result = self.extract_phone_card_passport(tag)
+                for tag in data[key]:  #处理data里面子列表
+                    result = self.extract_phone_card_passport(tag) #进行正则处理
                     if result:
-                        result[key.replace('s', '')] = tag
-                        need_datas.append(result)
-                if need_datas:
-                    data_dict[key] = need_datas
-                    data_dict['path'] = data['path']
-                    results.append(data_dict)
+                        result[key.replace('s', '')] = tag  #添加具体哪个目标数据被解析出结果
+                        need_datas.append(result) #将结果存入一个列表中
+                data['results'] = need_datas #在源数据中插入结果列表的数据
+                # results.append(data) #将每个path对应的urls解析结果进行保存
             except KeyError as e:
                 print('遍历得到的data中缺少Key：%s' % e)
-        return results
-
-need_url  =AnalysisUrlsEmails(dat).handle_urls_emails()
-print(need_url)
+        return datas
 
 
+# need_url  =AnalysisUrlsEmails(dat[0:3]).handle_urls_emails()
+# print(need_url)
 
-test_datas = [
-    {
-        'urls':
-        [
-            'https://api.weibo.cn/2/sdk/login?l=E18337261829', 'http://api.weibo.cn/2/sdk/login35302020010603181X'
-        ],
-        'path': 'com/sina/weibo/sdk/network/intercept/GuestParamInterception.java'
-    },
-    {
-        'urls':
-        [
-            'https://service.weibo.com/share/mobilesdk.php?x=e235123213'
-        ],
-     	'path': 'com/alipay/mobile/nebulax/integration/mpaas/view/a.java'
-    }
-]
-test_data_ = [
-    {
-        'emails': ['xxxx352210199803012381@xxxx.com'],
-        'path': 'com/huawei/hms/support/api/push/a/d/a.java'
-    },
-    {
-        'emails': ['danikula@gmail.com'],
-        'path': 'defpackage/efg.java'
-    },
-    {
-        'emails': ['您都可以通过拨打高德客服电话4008100080或通过发送邮件至gd.service@autonavi.com与我们联系'],
-        'path': 'defpackage/bpv.java'
-    },
-    {
-        'emails': ['g23112342d.jubao@service.autonavi', 'amap14312321341@amap.com'],
-        'path': 'Android String Resource'
-    }]
+
 
 #handle_urls_emails 返回值
 
@@ -813,27 +789,31 @@ import asyncio
 import aiohttp
 s_time = time.time()
 class AnalysisResponse(object):
-    def __init__(self,urls:list,total=None,connect=None,sock_connect=15,sock_read=None):
+    def __init__(self,urls:list,datas:list,total=None,connect=None,sock_connect=15,sock_read=None):
         self.urls = urls
+        self.datas = datas
         self.total = total
         self.connect = connect
         self.sock_connect = sock_connect
         self.sock_read = sock_read
-    async def get(self,tag):
+
+    def __setitem__(self, k, v):
+        self.k = v
+    async def get(self,url):
         connector = aiohttp.TCPConnector(limit=10)
         timeout = aiohttp.ClientTimeout(total=self.total,connect=self.connect,
                                         sock_connect=self.sock_connect,
                                         sock_read=self.sock_read)
         async with aiohttp.ClientSession(timeout=timeout,connector=connector) as session:
-            async with session.get(tag['url']) as rep:
+            async with session.get(url) as rep:
                 if rep.status == 200:
-                    return {'url':tag['url'], 'path':tag['path'],'resp':await rep.text()}  # 返回响应内容
+                    return {'url':url,'resp':await rep.text()}  # 返回响应内容
                     # return url, rep.headers #返回响应头信息
-    async def request(self,tag):
-        url = tag['url']
-        print('await :%s'%tag['url'])
+    async def request(self,url):
+
+        print('await :%s'%url)
         try:
-            result = await self.get(tag)
+            result = await self.get(url)
             #得到响应内容
             return result
 
@@ -848,20 +828,84 @@ class AnalysisResponse(object):
         #     print('{0} <-- url: {1}'.format(e, url))
     def handle_resp(self,tasks):
         extract_url_response = []
+        # [{'urls': ['https://api.weibo.cn/2/sdk/login13145652786',
+        # 'http://e18727829api.weibo.cn/2/sdk/login'],
+        #   'path': 'test1.java'},
+        #   {'urls': ['https://service.weibo.com/share/mobilesdk_uppic.php89383898',
+        #             'https://service.weibo.com/share/mobilesdk.php'],
+        #   'path': 'test3.java'}]
         for task in tasks:
             if task.result():
                 res = AnalysisUrlsEmails.extract_phone_card_passport(str(task.result()['resp'])) #re匹配响应内容(json/html)
-                if res: #拼装数据
+                if res: #如果解析到数据,需要找出这个url的出处(来自哪个urls)
                     res['url'] = task.result()['url']
                     res['response'] = task.result()['resp']
-                    res['path'] = task.result()['path']
-                    extract_url_response.append(res)
-        #完成解析响应内容
-        return extract_url_response
+                    for data in self.datas:  #遍历当前的全部数据源,
+                        # data_dict, need_datas = {}, []
+                        #如果response中解析到数据,,需要拼装
+                        if res['url'] in data['urls']: #判断该url在哪个urls中出现,存在,在该data中的results的key中对应的字段添加值
+                            # data['results'] = res
+                            if data['results']: #如果第一次re没有匹配成功,那么该值为[] ,空列表,将测试resp解析的结果插入
+                                pass
+
+
+                        # else:data['results'] = []
+
+                        extract_url_response.append(data)
+        #得到的结果和第一步简单re匹配的结果是一样的,只是在results字段的结果集里面会多一个response字段
+        # 接下来要进行合并
+
+        #测试数据
+        for data in self.datas:  # 遍历当前的全部数据源,
+            data_dict, need_datas = {}, []
+            # 如果response中解析到数据,,需要拼装
+
+            i= 0
+            print(len(tasks))
+            for task in tasks:
+                i = i + 1
+                print('异步请求次数:%s'%(i))
+                print('第一次正则的结果:%s' % data)
+                if task.result():
+                    print('进来了:%s'%(task.result()['url']))
+                    # print(task.result()['resp'])  #添加测试数
+                    r = '{msg:18337258719'
+                    print('response:%s'%r)
+                    # res = AnalysisUrlsEmails.extract_phone_card_passport(str(task.result()['resp']))  # re匹配响应内容(json/html)
+                    res = AnalysisUrlsEmails.extract_phone_card_passport(r)  # re匹配响应内容(json/html)
+                    print('解析结果:%s'%res)
+                    if res:
+                        res['url'] = task.result()['url']
+                        # res['response'] = task.result()['resp']
+                        res['response'] = r
+                        if res['url'] in data['urls']:  # 判断该url在哪个urls中出现,存在,在该data中的results的key中对应的字段添加值
+                            # data['results'] = res
+                              # 如果第一次re没有匹配成功,那么该值为[] ,空列表,将测试resp解析的结果插入
+                            if not data['results']:  #如果第一次的结果中results为空[] ,
+                                print('第一次re时为空')
+                                need_datas.append(res)
+                                print(need_datas)
+                            else: #不为空,需要判断此时url是否与结果中的某个url一样,如果一样需要将结果追加到已有的结果中
+                                for r in data['results']:
+                                    if r['url'] == res['url']:
+                                        #存在,将resp的解析的结果,拼接在原有的results中
+                                        r['phones'].extend(res['phones'])
+                                        r['cards'].extend(res['cards'])
+                                        r['passports'].extend(res['passports'])
+                                        r['gps_lng_lat'].extend(res['gps_lng_lat'])
+                                        r['response'] = res['response']  #将对应的response响应内容加上
+                                    else:#不存在,在第一次的结果集中没有找到相等的url,则需要在结果集加上此时resp解析的结果
+                                        need_datas.append(res)
+
+
+            if need_datas:
+                data['results'].extend(need_datas)
+        print('最终结果:%s'%self.datas)
+        return self.datas
 
     def run(self):
 
-        tasks = [asyncio.ensure_future(self.request(url)) for url in self.urls[0:10]]
+        tasks = [asyncio.ensure_future(self.request(url)) for url in self.urls[0:50]]
         # for task in tasks:if task.result()
         #     task.add_done_callback(self.callback)
         loop = asyncio.get_event_loop()
@@ -875,15 +919,22 @@ class AnalysisResponse(object):
 
 def main(types:str,datas:list):  #注意：不能去重
     #开始匹配 %s : %types
+    # print(datas)
     AUE = AnalysisUrlsEmails(datas=datas)
     first_result = AUE.handle_urls_emails()
-
+    print('第一册')
+    print(first_result)
+    print('------------')
     if types == "urls":
         #开始匹配URL响应内容
-        access_urls = AUE.extract_access_urls()
-        total_urls = [{'url':l,'path':u['path']} for u in access_urls for l in u['urls']]
-        print(total_urls[0:2])
-        resp_result = AnalysisResponse(urls=total_urls).run()  #得到response对象
+        total_urls = list(set([l for u in first_result for l in u['urls']]))
+        print(total_urls)
+        #将access_urls 与 total_urls 传入,,access_urls用做比对
+        resp_result = AnalysisResponse(urls=total_urls,datas=first_result).run()  #得到response对象
+        #resp_result结果与第一步的一样,如果没用解析到
+
+
+
 
         #将解析的内容合并到第一步结果中
         # print(first_result)
@@ -892,7 +943,7 @@ def main(types:str,datas:list):  #注意：不能去重
 
     elif types == "emails": return first_result
 start_time = time.time()
-# main('urls',dat)
+main('urls',dat[0:5])
 end_time = time.time()
 
 print(end_time-start_time)
