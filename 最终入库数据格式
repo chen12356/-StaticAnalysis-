@@ -1,103 +1,98 @@
+ urls:
+ [
+    {
+        "urls":[
+            "http://192.168.1.201:12345/ad_monitor/uploadReceiver.php?os=android&platform=domob"
+        ],
+        "path":"cn/domob/android/ads/C0027o.java",
+        "results":[
+
+        ]
+    },
+    {
+        "urls":[
+            "http://www.google.com/loc/json"
+        ],
+        "path":"cn/domob/android/ads/C0029q.java",
+        "results":[
+
+        ]
+    },
+    {
+        "urls":[
+            "http://r.domob.cn/a/"
+        ],
+        "path":"cn/domob/android/ads/C0032t.java",
+        "results":[
+
+        ]
+    },
+    {
+        "urls":[
+            "http://e.domob.cn/event_report",
+            "http://r.domob.cn/a/"
+        ],
+        "path":"cn/domob/android/ads/C0017e.java",
+        "results":[
+
+        ]
+    },
+    {
+        "urls":[
+            "http://r.domob.cn/a/"
+        ],
+        "path":"cn/domob/android/ads/C0022j.java",
+        "results":[
+
+        ]
+    },
+    {
+        "urls":[
+            "https://api.domob.cn/d"
+        ],
+        "path":"cn/domob/android/ads/C0034v.java",
+        "results":[
+
+        ]
+    },
+    {
+        "urls":[
+            "http://e.domob.cn/event_report"
+        ],
+        "path":"cn/domob/android/ads/A.java",
+        "results":[
+
+        ]
+    },
+    {
+        "urls":[
+            "http://e.domob.cn/event_report"
+        ],
+        "path":"cn/domob/android/ads/C0021i.java",
+        "results":[
+
+        ]
+    },
+    {
+        "urls":[
+            "http://a.mobclix.com/fail"
+        ],
+        "path":"com/mobclix/android/sdk/MobclixWebView.java",
+        "results":[
+
+        ]
+    }
+]
+
+emails:
 [
     {
-        "urls":[
-            "http://www.baidu.com"
+        "emails":[
+            "cs@rockmobile.com"
         ],
-        "path":"com/alipay/mobile/nebulacore/web/H5ScriptLoader.java",
+        "path":"game/config/dConfig.java",
         "results":[
-            {
-                "phones":[
-                    "18337258719"
-                ],
-                "cards":[
 
-                ],
-                "passports":[
-
-                ],
-                "gps_lng_lat":[
-
-                ],
-                "url":"http://www.baidu.com"
-            }
-        ]
-    },
-    {
-        "urls":[
-            "https://api.weibo.cn/2/sdk/login13145652786",
-            "http://e18727829api.weibo.cn/2/sdk/login"
-        ],
-        "path":"test1.java",
-        "results":[
-            {
-                "phones":[
-                    "13145652786"
-                ],
-                "cards":[
-
-                ],
-                "passports":[
-
-                ],
-                "gps_lng_lat":[
-
-                ],
-                "url":"https://api.weibo.cn/2/sdk/login13145652786"
-            },
-            {
-                "phones":[
-
-                ],
-                "cards":[
-
-                ],
-                "passports":[
-                    "E18727829"
-                ],
-                "gps_lng_lat":[
-
-                ],
-                "url":"http://e18727829api.weibo.cn/2/sdk/login"
-            }
-        ]
-    },
-    {
-        "urls":[
-            "https://service.weibo.com/share/mobilesdk_uppic.php89383898",
-            "http://www.baidu.com"
-        ],
-        "path":"test3.java",
-        "results":[
-            {
-                "phones":[
-                    "18337258719"
-                ],
-                "cards":[
-
-                ],
-                "passports":[
-                    "P89383898"
-                ],
-                "gps_lng_lat":[
-
-                ],
-                "url":"https://service.weibo.com/share/mobilesdk_uppic.php89383898"
-            },
-            {
-                "phones":[
-                    "18337258719"
-                ],
-                "cards":[
-
-                ],
-                "passports":[
-
-                ],
-                "gps_lng_lat":[
-
-                ],
-                "url":"http://www.baidu.com"
-            }
         ]
     }
 ]
