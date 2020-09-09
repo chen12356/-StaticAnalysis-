@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if urldict.results %}
+{% if not urldict.results|length == 1 %}
+
+<td class="td_url_email">
+    {% for res in urldict.results %}
+
+    <p style="width:95px;height:48px;margin-right: 10px;margin-left: 10px;padding-bottom: 5px;margin-bottom:5px;overflow: auto">
+        {% if res.phones %}
+        {% for phones in res.phones %}
+        {{ phones }}
+        {% endfor %}
+        {% else %}
+        {{ "/" }}
+        {% endif %}
+    </p>
+    {% if not forloop.last %}
+    <hr style="margin: 0;padding-bottom: 5px">
+    {% endif %}
+
+    {% endfor %}
+</td>
+<td class="td_url_email">
+    {# style="width: 150px"#}
+    {% for res in urldict.results %}
+    <p style="width: 150px;height:48px;margin-right: 10px;margin-left: 10px;padding-bottom: 5px;margin-bottom:5px;overflow: auto">
+        {% if res.cards %}
+        {% for cards in res.cards %}
+        {{ cards }}
+        {% endfor %}
+        {% else %}
+        {{ "/" }}
+        {% endif %}
+
+    </p>
+    {% if not forloop.last %}
+    <hr style="margin: 0;padding-bottom: 5px">
+    {% endif %}
+    {% endfor %}
+
+</td>
+<td class="td_url_email">
+    {# style="width:80px " #}
+    {% for res in urldict.results %}
+
+
+    <p style="width:80px ;height:48px;margin-right: 10px;margin-left: 10px;margin-bottom:5px;padding-bottom: 5px;overflow: auto">
+        {% if res.passports %}
+        {% for passports in res.passports %}
+        {{ passports }}
+        {% endfor %}
+        {% else %}
+        {{ "/" }}
+        {% endif %}
+    </p>
+    {% if not forloop.last %}
+    <hr style="margin: 0;padding-bottom: 5px">
+    {% endif %}
+    {% endfor %}
+
+
+</td>
+<td class="td_url_email">
+    {# style="width:105px"#}
+    {% for res in urldict.results %}
+    <p style="width: 100px;height:48px;margin-right: 10px;margin-left: 10px;margin-bottom:5px;padding-bottom: 5px;overflow: auto">
+        {% if res.gps_lng_lat %}
+        {% for gps_lng_lat in res.gps_lng_lat %}
+        {{ gps_lng_lat }}
+        {% endfor %}
+        {% else %}
+        {{ "/" }}
+        {% endif %}
+    </p>
+    {% if not forloop.last %}
+    <hr style="margin: 0;padding-bottom: 5px">
+    {% endif %}
+    {% endfor %}
+
+
+</td>
+<td class="td_url_email">
+    {# style="width:200px"#}
+    {% for res in urldict.results %}
+    <p style="width: 200px;height:48px;margin-right: 10px;margin-left: 10px;margin-bottom:5px;padding-bottom: 5px;overflow: auto">
+        {% if res.url %}
+
+        {{ res.url }}
+
+        {% else %}
+        {{ "/" }}
+        {% endif %}
+    </p>
+    {% if not forloop.last %}
+    <hr style="margin: 0;padding-bottom: 5px">
+    {% endif %}
+    {% endfor %}
+
+</td>
+{% else %}
+{% if urldict.results.0.phones %}
+
+
+<td>
+    {% for foo in urldict.results.0.phones %}
+    {{ foo }}
+    {% endfor %}
+</td>
+{% else %}
+<td>{{ "/" }}</td>
+{% endif %}
+{% if urldict.results.0.cards %}
+
+
+<td>{% for foo in urldict.results.0.cards %}
+    {{ foo }}
+    {% endfor %}
+</td>
+{% else %}
+<td>{{ "/" }}</td>
+{% endif %}
+{% if urldict.results.0.passports %}
+<td>
+    {% for foo in urldict.results.0.passports %}
+    {{ foo }}
+    {% endfor %}
+</td>
+{% else %}
+<td>{{ "/" }}</td>
+{% endif %}
+{% if urldict.results.0.gps_lng_lat %}
+<td>
+    {% for foo in urldict.results.0.gps_lng_lat %}
+    {{ foo }}
+    {% endfor %}
+</td>
+{% else %}
+<td>{{ "/" }}</td>
+{% endif %}
+<td>{{ urldict.results.0.url }}</td>
+
+{% endif %}
+{% else %}
+<td>{{ "/" }}</td>
+<td>{{ "/" }}</td>
+<td>{{ "/" }}</td>
+<td>{{ "/" }}</td>
+<td>{{ "/" }}</td>
+{% endif %}
+
+</body>
+</html>

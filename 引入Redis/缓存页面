@@ -1,0 +1,30 @@
+#需要找到对应的key,将存在该key的数据都删除了
+
+host = '{scheme}://{host}/'.format(
+   scheme=request.scheme,
+   host=request.get_host())
+    # http://127.0.0.1:8001/StaticAnalyzer/?name=zhangfabao.apk&type=apk&checksum=ad7fc08fd2e7020dfb042ec8d1660264
+
+    url = '{host}StaticAnalyzer/?name={name}&type={type}&checksum={md5}'.format(
+            host=host,name=scan[0].FILE_NAME,type=scan[0].FILE_NAME.rsplit('.')[-1],md5=md5_hash
+           )
+    print(url)
+    # s = "15c720f8f01146ac1fbab8fcfa465006"
+    print(host)
+    md5_ = hashlib.md5()
+    md5_.update(url.encode('ascii'))
+    k = '*'+md5_.hexdigest()+'*'
+    print(k)
+    rds.delete(*rds.keys(pattern=k))
+
+
+#清除静态分析页面缓存
+def expire_page(**kwargs):
+    # http://127.0.0.1:8001/StaticAnalyzer/?name=com.rtk.app.apk&type=apk&checksum=c9388eb7d2dea4921ec59fdf0c1544f9
+    url = '{host}/StaticAnalyzer/?name={name}&type={type}&checksum={md5}'.format(**kwargs)
+    md5 = hashlib.md5()
+    md5.update(url.encode('ascii'))
+    cache_header = ':1:views.decorators.cache.cache_header..{0}.en-us.UTC'.format(md5.hexdigest())
+
+    # if cache.has_key(key):
+    #     cache.delete(key)

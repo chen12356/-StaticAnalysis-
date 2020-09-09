@@ -6,7 +6,13 @@
         ],
         "path":"cn/domob/android/ads/C0027o.java",
         "results":[
-
+            {
+                "phones":["18337258710","15160578228"],
+                "cards":[],
+                "passports":["E16728736"],
+                "gps_lng_lat":[(78.356287,120.834628)]
+                "url":"http://192.168.1.201:12345/ad_monitor/uploadReceiver.php?os=android&platform=domob"
+            }
         ]
     },
     {
@@ -34,7 +40,20 @@
         ],
         "path":"cn/domob/android/ads/C0017e.java",
         "results":[
-
+            {
+                "phones":["18337258710","15160578228"],
+                "cards":[],
+                "passports":["E16728736"],
+                "gps_lng_lat":[(78.356287,120.834628)],
+                "url":"http://e.domob.cn/event_report"
+            },
+            {
+                "phones":["18337258710","15160578228"],
+                "cards":[],
+                "passports":["E16728736"],
+                "gps_lng_lat":[(78.356287,120.834628)],
+                "url":"http://r.domob.cn/a/"
+            }
         ]
     },
     {
@@ -43,7 +62,13 @@
         ],
         "path":"cn/domob/android/ads/C0022j.java",
         "results":[
-
+            {
+                "phones":["18337258710","15160578228"],
+                "cards":[],
+                "passports":["E16233236"],
+                "gps_lng_lat":[(78.356287,120.834628)],
+                "url":"http://r.domob.cn/a/"
+            }
         ]
     },
     {
@@ -51,33 +76,6 @@
             "https://api.domob.cn/d"
         ],
         "path":"cn/domob/android/ads/C0034v.java",
-        "results":[
-
-        ]
-    },
-    {
-        "urls":[
-            "http://e.domob.cn/event_report"
-        ],
-        "path":"cn/domob/android/ads/A.java",
-        "results":[
-
-        ]
-    },
-    {
-        "urls":[
-            "http://e.domob.cn/event_report"
-        ],
-        "path":"cn/domob/android/ads/C0021i.java",
-        "results":[
-
-        ]
-    },
-    {
-        "urls":[
-            "http://a.mobclix.com/fail"
-        ],
-        "path":"com/mobclix/android/sdk/MobclixWebView.java",
         "results":[
 
         ]
